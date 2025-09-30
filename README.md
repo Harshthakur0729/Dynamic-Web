@@ -1,37 +1,29 @@
 ﻿# Dynamic-Web
 
-BACKEND .env formate 
+BACKEND .env formate
+
 PORT=5000
-
 SESSION_SECRET=
-
 //Frontend URL
 ORIGIN=Frontend_URL
-
 //MONGODB
 MONGODB_URL=
-
 // JWT
 JWT_SECRET=
 JWT_SECRET_reset_Password=
-
-
 // REDIS
 REDIS_HOST=
 REDIS_PORT=
 REDIS_PASSWORD=
-
 // CLOUDINARY 
 CLOUDINARY_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
-
 // Email For Reset Password 
 EMAIL_USER=
 EMAIL_PASS=
 
-
-
 FRONTEND .env formate
 VITE_BACKEND_URL=Backend_URL
+
 
