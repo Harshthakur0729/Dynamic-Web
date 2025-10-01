@@ -165,6 +165,7 @@ const MenuManager = () => {
                         <th className="border p-2">Header Logo</th>
                         <th className="border p-2">Footer Logo</th>
                         <th className="border p-2">Text</th>
+                        <th className="border p-2">Info</th>
                         <th className="border p-2">Check</th>
                     </tr>
                 </thead>
@@ -185,12 +186,16 @@ const MenuManager = () => {
                                 <h1 className="font-bold">{item.text || "-"}</h1>
                             </td>
                             <td className="border p-2 text-center">
+                                <h1 className="font-bold">{item.info || "-"}</h1>
+                            </td>
+                            <td className="border p-2 text-center">
                                 <input
                                     type="checkbox"
                                     checked={item.check || false}
                                     onChange={() => handleOtherCheck(item._id)} // id pass karna kaafi hai
                                 />
                             </td>
+
                         </tr>
                     ))}
                 </tbody>

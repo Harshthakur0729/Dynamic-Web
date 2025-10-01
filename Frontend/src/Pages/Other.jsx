@@ -8,14 +8,16 @@ const Other = () => {
     const [headerLogo, setHeaderLogo] = useState({ file: null, preview: "" });
     const [footerLogo, setFooterLogo] = useState({ file: null, preview: "" });
     const [text, setText] = useState("");
+    const [info, setInfo] = useState("");
     const [changeBtn, setChangeBtn] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [records, setRecords] = useState([]);
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
+
     const API = import.meta.env.VITE_BACKEND_URL + "/api/admin/other";
 
-    // ===== Load all records =====
+    // ===== Fetch All Records =====
     const fetchRecords = async () => {
         try {
             const res = await axios.get(API, { withCredentials: true });
@@ -25,6 +27,7 @@ const Other = () => {
             Swal.fire("Error", "Failed to fetch records", "error");
         }
     };
+
     const fetchPages = async () => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/getData`, {
@@ -37,6 +40,7 @@ const Other = () => {
             console.error("Fetch pages failed:", err);
         }
     };
+
     useEffect(() => {
         fetchPages();
         fetchRecords();
@@ -48,6 +52,8 @@ const Other = () => {
         try {
             const formData = new FormData();
             formData.append("text", text);
+            formData.append("info", info);
+
 
             if (headerLogo.file) formData.append("headerLogo", headerLogo.file);
             if (footerLogo.file) formData.append("footerLogo", footerLogo.file);
@@ -72,10 +78,11 @@ const Other = () => {
 
             Swal.fire("Success", res.data.message || "Saved successfully", "success");
 
-            // Reset
+            // Reset fields
             setHeaderLogo({ file: null, preview: "" });
             setFooterLogo({ file: null, preview: "" });
             setText("");
+            setInfo("");
             setChangeBtn(false);
             setEditingId(null);
 
@@ -92,6 +99,7 @@ const Other = () => {
         setHeaderLogo({ file: null, preview: record.logo?.header_logo || "" });
         setFooterLogo({ file: null, preview: record.logo?.footer_logo || "" });
         setText(record.text || "");
+         setInfo(record.info || ""); 
         setChangeBtn(true);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
@@ -131,23 +139,33 @@ const Other = () => {
 
             {/* Main Container */}
             <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md space-y-8">
-
-                {/* Title */}
                 <h1 className="text-3xl font-bold text-purple-700">
                     {changeBtn ? "Edit Other Page" : "Add Other Page"}
                 </h1>
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
-
-                    {/* Text Field */}
+                    {/* Text */}
                     <div className="flex flex-col">
                         <label className="font-semibold text-gray-700 mb-1">Text</label>
-                        <textarea
+                        <input
+                            type="text"
                             value={text}
                             onChange={(e) => setText(e.target.value)}
-                            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none resize-none"
-                            rows={4}
+                            placeholder="Enter text"
+                            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none"
+                        />
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex flex-col">
+                        <label className="font-semibold text-gray-700 mb-1">Info</label>
+                        <input
+                            type="text"
+                            value={info}
+                            onChange={(e) => setInfo(e.target.value)}
+                            placeholder="Enter additional info"
+                            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none"
                         />
                     </div>
 
@@ -159,7 +177,7 @@ const Other = () => {
                             placeholder="Or enter image URL"
                             value={headerLogo.preview}
                             onChange={(e) => setHeaderLogo({ file: null, preview: e.target.value })}
-                            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none mb-2"
+                            className="border border-gray-300 rounded-lg px-3 py-2 mb-2 focus:ring-2 focus:ring-purple-300 focus:outline-none"
                         />
                         <input
                             type="file"
@@ -187,7 +205,7 @@ const Other = () => {
                             placeholder="Or enter image URL"
                             value={footerLogo.preview}
                             onChange={(e) => setFooterLogo({ file: null, preview: e.target.value })}
-                            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-300 focus:outline-none mb-2"
+                            className="border border-gray-300 rounded-lg px-3 py-2 mb-2 focus:ring-2 focus:ring-purple-300 focus:outline-none"
                         />
                         <input
                             type="file"
@@ -227,6 +245,7 @@ const Other = () => {
                                 <thead className="bg-gray-100">
                                     <tr>
                                         <th className="px-4 py-2 border text-left">Text</th>
+                                        <th className="px-4 py-2 border text-left">Info</th>
                                         <th className="px-4 py-2 border text-left">Header Logo</th>
                                         <th className="px-4 py-2 border text-left">Footer Logo</th>
                                         <th className="px-4 py-2 border text-left">Actions</th>
@@ -234,9 +253,10 @@ const Other = () => {
                                 </thead>
                                 <tbody>
                                     {records.map((record) => (
-                                        <tr key={record._id} className="text-center hover:bg-gray-50 transition">
+                                        <tr key={record._id} className="hover:bg-gray-50 transition">
                                             <td className="px-4 py-2 border">{record.text}</td>
-                                            <td className="px-4 py-2 border">
+                                            <td className="px-4 py-2 border">{record.info}</td>
+                                            <td className="px-4 py-2 border text-center">
                                                 {record.logo?.header_logo && (
                                                     <img
                                                         src={record.logo.header_logo}
@@ -245,7 +265,7 @@ const Other = () => {
                                                     />
                                                 )}
                                             </td>
-                                            <td className="px-4 py-2 border">
+                                            <td className="px-4 py-2 border text-center">
                                                 {record.logo?.footer_logo && (
                                                     <img
                                                         src={record.logo.footer_logo}
@@ -254,7 +274,7 @@ const Other = () => {
                                                     />
                                                 )}
                                             </td>
-                                            <td className="px-4 py-2 border space-x-2">
+                                            <td className="px-4 py-2 border space-x-2 text-center">
                                                 <button
                                                     onClick={() => handleEdit(record)}
                                                     className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
@@ -277,7 +297,6 @@ const Other = () => {
                 </div>
             </div>
         </>
-
     );
 };
 

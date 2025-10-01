@@ -56,6 +56,7 @@ const Sidebar = ({ menuOpen, setMenuOpen, editPage, menuRef, refresh }) => {
     fetchPages();
   }, [refresh]);
 
+
   return (
     <div
       ref={menuRef}
@@ -96,20 +97,25 @@ const Sidebar = ({ menuOpen, setMenuOpen, editPage, menuRef, refresh }) => {
             Management
           </Link>
 
-
+          <Link
+            className="font-semibold text-lg text-gray-700 border-2 border-gray-300 p-2 rounded-xl hover:bg-gray-100 transition"
+            to="/stylesetting"
+          >
+            Styling Setting
+          </Link>
 
           <Link
             className="font-semibold text-lg text-gray-700 border-2 border-gray-300 p-2 rounded-xl hover:bg-gray-100 transition"
             to="/other"
           >
-            Logo
+            Info, Logo and CopyRight text
           </Link>
 
 
         </div>
 
         {/* Dynamic Pages */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto scrollbar-hide">
           {loading ? (
             <p className="text-gray-500">Loading...</p>
           ) : pages.length === 0 ? (
@@ -151,8 +157,10 @@ const Sidebar = ({ menuOpen, setMenuOpen, editPage, menuRef, refresh }) => {
                 </div>
               ))}
             </div>
+
           )}
         </div>
+
 
         {/* Logout Button */}
         <button

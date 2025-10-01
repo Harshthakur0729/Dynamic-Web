@@ -14,6 +14,7 @@ import Other from '../src/Pages/Other';
 import AdminProfile from './Admin/AdminProfile';
 import PasswordForgot from './Admin/PasswordForgot';
 import NewPassword from './Admin/NewPassword';
+import StyleForm from './Pages/StyleSetting';
 
 const App = () => {
   const [dynamicRoute, setDynamicRoute] = useState([]);
@@ -61,6 +62,8 @@ const App = () => {
         { path: "/admin/profile", element: <AdminProfile /> },
         { path: "/pageselect", element: <MenuManager /> },
         { path: "/other", element: <Other /> },
+        { path: "/stylesetting", element: <StyleForm /> },
+
 
       ],
     },

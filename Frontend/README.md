@@ -17,158 +17,157 @@ If you are developing a production application, we recommend using TypeScript wi
 
 
 
+  {/* 4 Terms and Team */}
+                    {page.content &&
+                        page.content.length > 0 &&
+                        page.content.map((section, secIdx) => {
+                            const hasValidTerms =
+                                section.terms &&
+                                ((section.terms.title && section.terms.title.trim() !== '') ||
+                                    (section.terms.subtitles &&
+                                        section.terms.subtitles.some(
+                                            (sub) =>
+                                                sub.subtitle?.trim() !== '' ||
+                                                (sub.points && sub.points.length > 0)
+                                        )));
 
+                            const hasValidTeam =
+                                section.team &&
+                                section.team.length > 0 &&
+                                section.team.some(
+                                    (block) =>
+                                        block.members &&
+                                        block.members.length > 0 &&
+                                        block.members.some((m) => m.name?.trim() !== '')
+                                );
 
-import React, { useState, useEffect, useRef } from "react";
-import { IoMenu } from "react-icons/io5";
-import { GoX, GoChevronDown } from "react-icons/go";
-import { Link } from "react-router-dom";
+                            if (!hasValidTerms && !hasValidTeam) return null;
 
-export default function ResponsiveHeader() {
-  const [isOpen, setIsOpen] = useState(false);
-  const sidebarRef = useRef(null);
+                            return (
+                                <div key={secIdx}>
+                                    {/* ✅ Render Terms Section if valid */}
+                                    {hasValidTerms && (
+                                        <section
+                                            className="px-6 md:px-12 py-12"
+                                            style={{ background: colour.terms.termsColour || 'white' }}
+                                        >
+                                            {section.terms.title?.trim() && (
+                                                <h1 className="text-3xl sm:text-6xl font-bold italic text-center mb-10 text-purple-800">
+                                                    {section.terms.title}
+                                                </h1>
+                                            )}
 
-  const [page, setPage] = useState([]);
-  const pageArray = (Array.isArray(page) ? page : [page])
-  console.log("Headerpage", page, "Headerpage Array", pageArray);
+                                            {section.terms.subtitles && section.terms.subtitles.length > 0 && (
+                                                <div className="max-w-7xl mx-auto text-gray-800 space-y-8">
+                                                    {section.terms.subtitles.map((sub, subIdx) => {
+                                                        const hasSubtitleOrPoints =
+                                                            sub.subtitle?.trim() !== '' ||
+                                                            (sub.points && sub.points.length > 0);
 
-  useEffect(() => {
-    const fetchDynamicRoutes = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin/getData`);
-        const data = await response.json();
-        console.log("Dynamic Routes Data:", data);
+                                                        if (!hasSubtitleOrPoints) return null;
 
-        if (data.success && Array.isArray(data.data)) {
-          setPage(data.data);
-        } else {
-          setPage([]);
-        }
-      } catch (error) {
-        console.error("Error fetching dynamic routes:", error);
-        setPage([]);
-      }
-    };
-    fetchDynamicRoutes();
-  }, []);
+                                                        return (
+                                                            <div key={subIdx}>
+                                                                {sub.subtitle?.trim() && (
+                                                                    <h2 className="text-xl sm:text-4xl font-bold italic text-center text-[#42149e] mb-4">
+                                                                        {sub.subtitle}
+                                                                    </h2>
+                                                                )}
 
-  // Close sidebar on outside click
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    }
+                                                                {sub.points && sub.points.length > 0 && (
+                                                                    <ul
+                                                                        className={`pl-6 space-y-2 text-sm sm:text-2xl leading-relaxed ${sub.points.filter(
+                                                                            (point) =>
+                                                                                point.text?.trim() !== '' ||
+                                                                                (point.subpoints &&
+                                                                                    point.subpoints.some(
+                                                                                        (sp) => sp?.trim() !== ''
+                                                                                    ))
+                                                                        ).length >= 3
+                                                                            ? 'list-decimal'
+                                                                            : ''
+                                                                            }`}
+                                                                    >
+                                                                        {sub.points.map((point, pIdx) => {
+                                                                            const hasPointText =
+                                                                                point.text?.trim() !== '' ||
+                                                                                (point.subpoints && point.subpoints.length > 0);
+                                                                            if (!hasPointText) return null;
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+                                                                            return (
+                                                                                <li key={pIdx}>
+                                                                                    {point.text?.trim()}
+                                                                                    {point.subpoints &&
+                                                                                        point.subpoints.length > 0 && (
+                                                                                            <ul className="list-disc pl-6 mt-2 space-y-1">
+                                                                                                {point.subpoints
+                                                                                                    .filter((sp) => sp?.trim() !== '')
+                                                                                                    .map((sp, spIdx) => (
+                                                                                                        <li key={spIdx}>{sp}</li>
+                                                                                                    ))}
+                                                                                            </ul>
+                                                                                        )}
+                                                                                </li>
+                                                                            );
+                                                                        })}
+                                                                    </ul>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                            <hr className="my-10 border-[#9f9f9f]" />
+                                        </section>
+                                    )}
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen]);
-  return (
-    <header className="w-full bg-yellow-300 shadow-md fixed top-0 left-0 z-50">
-      <div className="flex justify-between md:justify-around items-center px-6 py-4">
-        {/* Logo */}
-        <Link to={`/${page.page}`}>
-          <img
-            src="https://assets.zupee.com/zupee-revamp/assets/zupee-logo-v1.webp"
-            alt="Zupee Logo"
-            className="h-10 md:h-12 cursor-pointer"
-          />
-        </Link>
+                                    {/* ✅ Render Team Section if valid */}
+                                    {hasValidTeam && (
+                                        <section
+                                            className="px-6 md:px-12 lg:px-20 py-12"
+                                            style={{ background: colour.teamColour || 'white' }}
+                                        >
+                                            {section.team[0]?.title?.trim() && (
+                                                <h2 className="text-2xl sm:text-3xl md:text-6xl font-extrabold italic text-purple-800 text-center mb-12">
+                                                    {section.team[0].title}
+                                                </h2>
+                                            )}
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-8 text-purple-900 font-bold uppercase">
-          {/* Dropdown */}
-          <div className="relative group cursor-pointer flex items-center gap-1">
-            <span>MENU</span>
-            <GoChevronDown />
-            <div className="absolute left-0 top-full mt-1 bg-yellow-300 border-4 text-purple-900 shadow-lg rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 ease-in-out z-50 min-w-[220px]">
-              { // ensure it's array
-                pageArray.filter((item) => item.menuPlacement?.dropdown) // only dropdown=true
-                  .map((i) => (
-                    <div
-                      key={i._id || i.page}
-                      className="px-4 py-2 rounded-lg whitespace-nowrap hover:bg-yellow-400 transition"
-                    >
-                      <Link to={`/${i.page}`}>
-                        {i?.breadcrumb?.current || i.page || "Menu Item"}
-                      </Link>
-                    </div>
-                  ))}
-            </div>
-          </div>
-          {/* Other Links */}
-          {pageArray
-            .filter((item) => item.menuPlacement?.header) // only header=true
-            .map((items) => (
-              <Link
-                key={items._id || items.page}
-                to={`/${items.page}`}
-                className="cursor-pointer"
-              >
-                {items?.breadcrumb?.current || items.page || "Header Item"}
-              </Link>
-            ))}
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12">
+                                                {section.team.map((teamBlock, tIdx) =>
+                                                    teamBlock.members?.map((m, mIdx) =>
+                                                        m.name?.trim() ? (
+                                                            <div
+                                                                key={m._id || `${tIdx}-${mIdx}`}
+                                                                className="space-y-4"
+                                                            >
+                                                                <div className="w-full h-auto overflow-hidden rounded-lg transition-all duration-500 hover:rounded-tl-[8rem] hover:rounded-br-[8rem] relative flex items-center justify-center bg-gray-200">
+                                                                    {m.image && (
+                                                                        <img
+                                                                            src={m.image}
+                                                                            alt={m.name}
+                                                                            className="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
+                                                                        />
+                                                                    )}
+                                                                </div>
 
-        </nav>
+                                                                <h3 className="text-base sm:text-lg md:text-2xl font-bold text-purple-800 uppercase italic">
+                                                                    {m.name} {m.role && `– ${m.role}`}
+                                                                </h3>
+                                                                {m.description && (
+                                                                    <p className="text-gray-700 text-sm sm:text-lg leading-relaxed">
+                                                                        {m.description}
+                                                                    </p>
+                                                                )}
+                                                            </div>
+                                                        ) : null
+                                                    )
+                                                )}
+                                            </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-purple-900 text-3xl"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <GoX /> : <IoMenu />}
-        </button>
-      </div>
-
-      {/* Mobile Sidebar */}
-      {isOpen && (
-        <div
-          ref={sidebarRef}
-          className="fixed top-0 right-0 h-full w-64 bg-yellow-300 text-purple-900 shadow-lg transform transition-transform duration-300 z-50"
-        >
-          <div className="flex justify-between items-center px-6 py-4 border-b">
-            <img
-              src="https://assets.zupee.com/zupee-revamp/assets/zupee-logo-v1.webp"
-              alt="Zupee Logo"
-              className="h-10"
-            />
-            <button onClick={() => setIsOpen(false)} className="text-3xl">
-              <GoX />
-            </button>
-          </div>
-
-          <nav className="flex flex-col gap-4 p-6 font-bold uppercase">
-            {/* Zupee Games Subitems */}
-            {pageArray.filter((item) => item.menuPlacement?.dropdown).map((items) => (
-              <div key={items._id} className="ml-2 mt-4 flex flex-col gap-2">
-                <Link onClick={() => setIsOpen(false)} className="text-sm py-1 cursor-pointer" to={`/${items.page}`}>{items?.breadcrumb?.current || items?.page}</Link>
-              </div>
-            ))}
-
-            {pageArray
-              .filter((item) => item.menuPlacement?.header) // only header=true
-              .map((items) => (
-                <Link
-                  key={items._id || items.page}
-                  onClick={() => setIsOpen(false)}
-                  to={`/${items.page}`}
-                  className="py-2 cursor-pointer"
-                >
-                  {items?.breadcrumb?.current || items.page || "Header Item"}
-                </Link>
-              ))}
-
-
-          </nav>
-        </div>
-      )}
-    </header>
-  );
-}
+                                            <hr className="my-10 border-[#9293a5]" />
+                                        </section>
+                                    )}
+                                </div>
+                            );
+                        })}

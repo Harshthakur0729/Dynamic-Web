@@ -9,7 +9,18 @@ const othreSchema = new Schema({
     },
     text: { type: String },
     check: { type: Boolean, default: false },
-    
+    info: {
+        type: String,
+        validate: {
+            validator: function (value) {
+                if (!value) return true; // empty allowed
+                const wordCount = value.trim().split(/\s+/).length;
+                return wordCount <= 60;  // ✅ max 60 words allowed
+            },
+            message: "Info cannot exceed 60 words."
+        }
+    }
+
 
 }, { timestamps: true })
 

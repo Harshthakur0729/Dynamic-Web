@@ -66,7 +66,6 @@ export const adminLogout = async (req, res) => {
     try {
 
         const { token, exp } = req.tokenData;
-        console.log("req.tokenData", req.tokenData);
         const timeRemainingForToken = exp * 1000 - Date.now();
         const expiresInSeconds = Math.max(1, Math.floor(timeRemainingForToken / 1000));
         await redis.set(`blacklist:${token}`, true, "EX", expiresInSeconds);

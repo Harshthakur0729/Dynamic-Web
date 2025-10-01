@@ -16,7 +16,7 @@ const parseJSON = (value, fallback = undefined) => {
 // ✅ CREATE
 export const takeOther = async (req, res) => {
     try {
-        const { logo: logoRaw, text } = req.body;
+        const { logo: logoRaw, text, info } = req.body;
 
         const logo = parseJSON(logoRaw, { header_logo: "", footer_logo: "" });
 
@@ -26,7 +26,8 @@ export const takeOther = async (req, res) => {
 
         const newData = new Other({
             logo,
-            text
+            text,
+            info
         });
 
         await newData.save();
@@ -54,6 +55,7 @@ export const updateTakeOther = async (req, res) => {
         // Parse values
         const logo = req.body.logo ? JSON.parse(req.body.logo) : exist.logo;
         const text = req.body.text ?? exist.text;
+        const info = req.body.info ?? exist.info;
         const check = typeof req.body.check === "boolean" ? req.body.check : exist.check;
 
         // Header and Footer Logo update if file exists
@@ -63,7 +65,7 @@ export const updateTakeOther = async (req, res) => {
         // Update DB
         const updatedData = await Other.findByIdAndUpdate(
             id,
-            { $set: { logo, text, check } },
+            { $set: { logo, text, check, info } },
             { new: true, runValidators: true }
         );
 

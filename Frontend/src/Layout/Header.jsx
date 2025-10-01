@@ -3,7 +3,7 @@ import { IoMenu } from "react-icons/io5";
 import { GoX, GoChevronDown } from "react-icons/go";
 import { Link } from "react-router-dom";
 
-export default function ResponsiveHeader({ other }) {
+export default function ResponsiveHeader({ other, style }) {
   const API = import.meta.env.VITE_BACKEND_URL;
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState([]);
@@ -13,7 +13,7 @@ export default function ResponsiveHeader({ other }) {
   const sidebarRef = useRef(null);
   // console.log("Headerpage", page, "Headerpage Array", pageArray);
 
-  console.log("other", otherArray);
+  // console.log("other", otherArray);
 
 
   useEffect(() => {
@@ -55,9 +55,8 @@ export default function ResponsiveHeader({ other }) {
     };
   }, [isOpen]);
 
-
   return (
-    <header className="w-full bg-yellow-300 shadow-md fixed top-0 left-0 z-50">
+    <header style={{ background: style.headerSection.headerbgColour || "#fee800" }} className="w-full  shadow-md fixed top-0 left-0 z-50">
       <div className="flex justify-between md:justify-around items-center px-6 py-4">
         {/* Logo */}
         <Link to={`/${page.page}`}>
@@ -75,12 +74,12 @@ export default function ResponsiveHeader({ other }) {
 
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-8 text-purple-900 font-bold uppercase">
+        <nav style={{ fontSize: `${style.headerSection.headerfontSize}px`, fontWeight: style.headerSection.headerfontWeight || "bold", fontFamily: style.headerSection.headerfontfamily || "", color: style.headerSection.headerfontColour || "#4412a6" }} className="hidden md:flex gap-8 uppercase">
           {/* Dropdown */}
           <div className="relative group cursor-pointer flex items-center gap-1">
             <span>MENU</span>
             <GoChevronDown />
-            <div className="absolute left-0 top-5 mt-1 bg-yellow-300 border-1 text-purple-900 duration-1000 shadow-lg rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition  ease-in-out z-50 min-w-[220px]">
+            <div style={{ background: style.headerSection.headerbgColour || "#fee800", color: style.headerSection.headerfontColour || "#4412a6" }} className="absolute left-0 top-5 mt-1  border-1 duration-1000 shadow-lg rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition  ease-in-out z-50 min-w-[220px]">
               { // ensure it's array
                 pageArray.filter((item) => item.menuPlacement?.dropdown) // only dropdown=true
                   .map((i) => (
@@ -123,7 +122,8 @@ export default function ResponsiveHeader({ other }) {
       {isOpen && (
         <div
           ref={sidebarRef}
-          className="fixed top-0 right-0 h-full w-64 bg-yellow-300 text-purple-900 shadow-lg transform transition-transform duration-300 z-50"
+          style={{ fontSize: `${style.headerSection.headerfontSize}px`, background: style.headerSection.headerbgColour || "#fee800", color: style.headerSection.headerfontColour || "#4412a6" }}
+          className="fixed top-0 right-0 h-full w-64 shadow-lg transform transition-transform duration-300 z-50"
         >
           <div className="flex justify-between items-center px-6 py-4 border-b">
             <img
@@ -136,7 +136,7 @@ export default function ResponsiveHeader({ other }) {
             </button>
           </div>
 
-          <nav className="flex flex-col gap-4 p-6 font-bold uppercase">
+          <nav style={{ fontWeight: style.headerSection.headerfontWeight || "bold", fontFamily: style.headerSection.headerfontfamily || "" }} className="flex flex-col gap-4 p-6  uppercase">
             {/* Zupee Games Subitems */}
             {pageArray.filter((item) => item.menuPlacement?.dropdown).map((items) => (
               <div key={items._id} className="ml-2 mt-4 flex flex-col gap-2">
