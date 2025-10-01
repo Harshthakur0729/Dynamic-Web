@@ -9,13 +9,7 @@ export default function ResponsiveHeader({ other, style }) {
   const [page, setPage] = useState([]);
   const pageArray = (Array.isArray(page) ? page : [page])
   const otherArray = (Array.isArray(other) ? other : [other])
-
   const sidebarRef = useRef(null);
-  // console.log("Headerpage", page, "Headerpage Array", pageArray);
-
-  // console.log("other", otherArray);
-
-
   useEffect(() => {
     const fetchDynamicRoutes = async () => {
       try {

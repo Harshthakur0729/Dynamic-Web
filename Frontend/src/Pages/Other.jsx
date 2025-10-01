@@ -15,12 +15,12 @@ const Other = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
-    const API = import.meta.env.VITE_BACKEND_URL + "/api/admin/other";
+    const API = import.meta.env.VITE_BACKEND_URL;
 
     // ===== Fetch All Records =====
     const fetchRecords = async () => {
         try {
-            const res = await axios.get(API, { withCredentials: true });
+            const res = await axios.get(`${API}/api/admin/other`, { withCredentials: true });
             setRecords(res.data.data || []);
         } catch (err) {
             console.error(err);
@@ -30,7 +30,7 @@ const Other = () => {
 
     const fetchPages = async () => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/getData`, {
+            const res = await axios.get(`${API}/api/admin/getData`, {
                 withCredentials: true,
             });
             if (res.data.success) {
@@ -65,7 +65,7 @@ const Other = () => {
                 );
             }
 
-            const url = changeBtn ? `${API}/update/${editingId}` : `${API}/create`;
+            const url = changeBtn ? `${API}/api/admin/other/update/${editingId}` : `${API}/api/admin/other/create`;
             const method = changeBtn ? "put" : "post";
 
             const res = await axios({
@@ -99,7 +99,7 @@ const Other = () => {
         setHeaderLogo({ file: null, preview: record.logo?.header_logo || "" });
         setFooterLogo({ file: null, preview: record.logo?.footer_logo || "" });
         setText(record.text || "");
-         setInfo(record.info || ""); 
+        setInfo(record.info || "");
         setChangeBtn(true);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
@@ -116,7 +116,7 @@ const Other = () => {
 
         if (result.isConfirmed) {
             try {
-                await axios.delete(`${API}/delete/${id}`, { withCredentials: true });
+                await axios.delete(`${API}/api/admin/other/delete/${id}`, { withCredentials: true });
                 Swal.fire("Deleted!", "Record has been deleted.", "success");
                 fetchRecords();
             } catch (err) {

@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 const Register = () => {
     const [details, setDetails] = useState({ username: "", email: "", password: "" });
     const navigate = useNavigate();
+    const API = import.meta.env.VITE_BACKEND_URL;
     const handleInput = (e) => {
         const { name, value } = e.target;
         setDetails((prev) => ({ ...prev, [name]: value }));
@@ -15,7 +16,7 @@ const Register = () => {
         e.preventDefault();
         try {
             const res = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/api/admin/register`,
+                `${API}/api/admin/register`,
                 details,
                 { withCredentials: true }
             );

@@ -7,7 +7,6 @@ import Sidebar from "./Sidebar";
 const PageEditor = () => {
   const [pageTitle, setPageTitle] = useState("");
   const [breadcrumb, setBreadcrumb] = useState("");
-
   const [hero, setHero] = useState({ heading: "", button: { text: "", link: "" }, image: "", file: null });
   const [images, setImages] = useState([]);
   const [imagesHeading, setImagesHeading] = useState("");
@@ -17,14 +16,13 @@ const PageEditor = () => {
     fields: [],
     button: { text: "Submit" }
   });
-
   const [faq, setFaq] = useState({ heading: "", faqsList: [] });
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
   const [refreshPages, setRefreshPages] = useState(0);
   const [changeBtn, setChangeBtn] = useState(false);
   const [editingPageId, setEditingPageId] = useState(null);
-
+  const API = import.meta.env.VITE_BACKEND_URL;
   // ===== Click Outside Sidebar =====
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -122,8 +120,8 @@ const PageEditor = () => {
       formData.append("faqs", JSON.stringify(faq));
 
       const url = changeBtn
-        ? `${import.meta.env.VITE_BACKEND_URL}/api/admin/dynamic/update/${editingPageId}`
-        : `${import.meta.env.VITE_BACKEND_URL}/api/admin/dynamic/create`;
+        ? `${API}/api/admin/dynamic/update/${editingPageId}`
+        : `${API}/api/admin/dynamic/create`;
       const method = changeBtn ? "put" : "post";
 
       const res = await axios({
@@ -157,7 +155,7 @@ const PageEditor = () => {
   // ===== Edit Page Function =====
   const editPage = async (id) => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/dynamic/${id}`, { withCredentials: true });
+      const res = await axios.get(`${API}/api/admin/dynamic/${id}`, { withCredentials: true });
       const data = res.data.data;
       console.log("edit", data);
 

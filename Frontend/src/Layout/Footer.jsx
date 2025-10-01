@@ -6,12 +6,13 @@ export default function Footer({ other, style }) {
     const [page, setPage] = useState([]);
     const pageArray = (Array.isArray(page) ? page : [page])
     const otherArray = (Array.isArray(other) ? other : [other])
+    const API = import.meta.env.VITE_BACKEND_URL;
     // console.log("footer", otherArray);
 
     useEffect(() => {
         const fetchDynamicRoutes = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin/getData`);
+                const response = await fetch(`${API}/api/admin/getData`);
                 const data = await response.json();
                 console.log("Dynamic Routes Data:", data);
 

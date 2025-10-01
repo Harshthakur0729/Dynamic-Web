@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 const Login = () => {
     const [details, setDetails] = useState({ username: "", email: "", password: "" })
     const navigate = useNavigate();
-
+    const API = import.meta.env.VITE_BACKEND_URL
 
 
     const handleInput = async (e) => {
@@ -21,7 +21,7 @@ const Login = () => {
         e.preventDefault();
         try {
             const res = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/api/admin/login`,
+                `${API}/api/admin/login`,
                 details,
                 { withCredentials: true, }
             );
