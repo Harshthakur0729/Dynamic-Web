@@ -18,7 +18,6 @@ const defaultFontFamilies = [
 
 const StyleForm = () => {
     const [formData, setFormData] = useState({});
-    const [loading, setLoading] = useState(true);
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef();
     const API = import.meta.env.VITE_BACKEND_URL;
@@ -37,8 +36,6 @@ const StyleForm = () => {
             } else {
                 Swal.fire("Error", "Failed to fetch data: " + err.message, "error");
             }
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -106,7 +103,7 @@ const StyleForm = () => {
         }
     };
 
-    if (loading) return <p>Loading...</p>;
+
 
     // Input components
     const SuggestionInput = ({ section, field, value }) => (
@@ -271,7 +268,7 @@ const StyleForm = () => {
             <div className="flex-1 flex flex-col">
                 {/* Hamburger */}
                 <button
-                    className="m-4 p-3 w-13 rounded-2xl bg-purple-600 text-white shadow-xl hover:bg-purple-700 transition duration-300"
+                    className="m-4 p-3 w-13 rounded-xl fixed bg-purple-600 text-white shadow-xl hover:bg-purple-700 transition duration-300"
                     onClick={() => setMenuOpen(!menuOpen)}
                 >
                     <GiHamburgerMenu size={28} />

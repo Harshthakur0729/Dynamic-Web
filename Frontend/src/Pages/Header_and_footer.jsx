@@ -114,7 +114,7 @@ const MenuManager = () => {
             <table className="w-full border">
                 <thead>
                     <tr>
-                        <th className="border p-2">Page</th>
+                        <th className="border p-2">Pages</th>
                         <th className="border p-2">Show in Header</th>
                         <th className="border p-2">Show in Footer</th>
                         <th className="border p-2">Show in Dropdown</th>

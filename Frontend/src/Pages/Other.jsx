@@ -131,7 +131,7 @@ const Other = () => {
             {/* Sidebar & Hamburger */}
             <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} menuRef={menuRef} refresh={fetchPages} />
             <button
-                className="mb-4 p-2 m-5 rounded-md bg-purple-600 text-white shadow hover:bg-purple-700 transition"
+                className="mb-4 p-2 m-5 rounded-md fixed bg-purple-600 text-white shadow hover:bg-purple-700 transition"
                 onClick={() => setMenuOpen(!menuOpen)}
             >
                 <GiHamburgerMenu size={28} />
@@ -274,10 +274,10 @@ const Other = () => {
                                                     />
                                                 )}
                                             </td>
-                                            <td className="px-4 py-2 border space-x-2 text-center">
+                                            <td className="px-4 py-2 border space-x-2 space-y-2  text-center">
                                                 <button
                                                     onClick={() => handleEdit(record)}
-                                                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                                                    className="px-3 ml-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                                                 >
                                                     Edit
                                                 </button>

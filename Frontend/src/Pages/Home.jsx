@@ -196,7 +196,7 @@ const PageEditor = () => {
 
       <div className="flex-1 overflow-auto p-6">
         <button
-          className="mb-4 p-2 rounded-md bg-purple-600 text-white shadow hover:bg-purple-700 transition"
+          className="mb-4 p-2 fixed rounded-md bg-purple-600 text-white shadow hover:bg-purple-700 transition"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <GiHamburgerMenu size={28} />

@@ -103,7 +103,7 @@ const AdminProfile = () => {
     return (
         <div className="min-h-screen bg-gray-100 relative">
             {/* Sidebar button stays fixed on top-left */}
-            <div className="absolute top-4 left-4 z-50">
+            <div className="fixed mt-5 ml-5">
                 <button
                     className="p-2 rounded-md bg-purple-600 text-white shadow hover:bg-purple-700 transition flex items-center"
                     onClick={() => setMenuOpen(!menuOpen)}
@@ -111,9 +111,9 @@ const AdminProfile = () => {
                     <GiHamburgerMenu size={28} />
                 </button>
             </div>
-
-            <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} menuRef={menuRef} refresh={fetchAdminData} />
-
+            
+                <Sidebar  menuOpen={menuOpen} setMenuOpen={setMenuOpen} menuRef={menuRef} refresh={fetchAdminData} />
+            
             {/* Centered Profile Card */}
             <div className="flex justify-center items-start pt-24 bg-gradient-to-b from-purple-100 to-white min-h-screen">
                 {adminData ? (
